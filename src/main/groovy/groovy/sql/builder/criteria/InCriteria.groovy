@@ -33,14 +33,25 @@ class InCriteria extends KeyValuePair {
         expression <<= "${name} IN ("
 
         value.eachWithIndex { val, index ->
-            expression <<= CriteriaUtil.getCriteriaValue(val)
+            expression <<= '?'
 
             if(index < value.size() - 1) {
-                expression <<= ", "
+                expression <<= ', '
             }
         }
 
-        expression <<= ")"
+        expression <<= ')'
         expression
+    }
+
+    @Override
+    def getParams() {
+        def params = []
+
+        value.each { val ->
+            params << CriteriaUtil.getCriteriaValue(val)
+        }
+
+        params
     }
 }

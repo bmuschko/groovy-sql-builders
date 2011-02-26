@@ -15,8 +15,6 @@
  */
 package groovy.sql.builder.criteria
 
-import groovy.sql.builder.criteria.util.CriteriaUtil
-
 /**
  *
  *
@@ -30,7 +28,7 @@ class NotEqualsCriteria extends KeyValuePair {
     @Override
     def renderExpression() {
         if(value) {
-            return "${name} != ${CriteriaUtil.getCriteriaValue(value)}"
+            return "${name} != ?"
         }
         else {
             return "${name} is not null"

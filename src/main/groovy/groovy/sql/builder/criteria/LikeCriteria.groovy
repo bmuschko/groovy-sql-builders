@@ -29,6 +29,6 @@ class LikeCriteria extends KeyValuePair {
 
     @Override
     def renderExpression() {
-        return "${name} like ${CriteriaUtil.getCriteriaValue(value)}"
+        return "${name} like ?"
     }
 }

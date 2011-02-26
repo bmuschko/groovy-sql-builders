@@ -31,10 +31,11 @@ class GroovySqlUpdateBuilderTest extends GroovySqlBuilderFixture {
             eq(name: 'name', value: 'Las Vegas')
         }
 
-        assert update.statement.sql == "UPDATE city SET name = ?, founded_year = ? WHERE name = 'Las Vegas'"
-        assert update.statement.params.size() == 2
+        assert update.statement.sql == "UPDATE city SET name = ?, founded_year = ? WHERE name = ?"
+        assert update.statement.params.size() == 3
         assert update.statement.params.get(0) == "'New Vegas'"
         assert update.statement.params.get(1) == '2011'
+        assert update.statement.params.get(2) == "'Las Vegas'"
         println "Updated rows: $update.result"
     }
 }

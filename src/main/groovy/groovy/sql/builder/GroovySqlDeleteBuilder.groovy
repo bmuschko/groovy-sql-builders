@@ -19,6 +19,9 @@ import groovy.sql.Sql
 import groovy.sql.builder.criteria.Criteria
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.criteria.factory.*
+import groovy.sql.builder.criteria.ParametizedCriteria
+import groovy.sql.builder.criteria.LogicOperator
+import groovy.sql.builder.criteria.util.CriteriaUtil
 
 /**
  *
@@ -57,7 +60,7 @@ class GroovySqlDeleteBuilder extends AbstractGroovySqlFactoryBuilder {
         void onNodeCompleted(FactoryBuilderSupport builder, Object parent, Object node) {
             def statement = createStatement(node)
             node.statement = statement
-            builder.sql.execute statement.sql
+            builder.sql.execute(statement.sql, statement.params)
         }
 
         private String createSql(String table, criterias) {
@@ -83,7 +86,20 @@ class GroovySqlDeleteBuilder extends AbstractGroovySqlFactoryBuilder {
 
         private Statement createStatement(Object node) {
             String sql = createSql(node.table, node.criterias)
-            new Statement(sql: sql)
+            def params = []
+            collectCriteriaParams(params, node.criterias)
+            new Statement(sql: sql, params: params)
+        }
+
+        private List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
+            criterias.each { criteria ->
+                if(criteria instanceof ParametizedCriteria) {
+                    params.addAll criteria.getParams()
+                }
+                else if(criteria instanceof LogicOperator) {
+                    collectCriteriaParams(params, criteria.criterias)
+                }
+            }
         }
 
         @Override

@@ -24,17 +24,17 @@ class OrCriteria extends LogicOperator {
     @Override
     def renderExpression() {
         def expression = new StringBuilder()
-        expression <<= "("
+        expression <<= '('
 
         criterias.eachWithIndex { nestedCriteria, index ->
             expression <<= nestedCriteria.renderExpression()
 
             if(index < criterias.size() - 1) {
-                expression <<= " OR "
+                expression <<= ' OR '
             }
         }
 
-        expression <<= ")"
+        expression <<= ')'
         expression
     }
 }

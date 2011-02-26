@@ -15,25 +15,11 @@
  */
 package groovy.sql.builder.criteria
 
-import groovy.sql.builder.criteria.util.CriteriaUtil
-
 /**
  *
  *
  * @author Benjamin Muschko
  */
-class EqualsCriteria extends KeyValuePair {
-    EqualsCriteria(name, value) {
-        super(name, value)
-    }
-
-    @Override
-    def renderExpression() {
-        if(value) {
-            return "${name} = ?"
-        }
-        else {
-            return "${name} is null"
-        }
-    }
+interface ParametizedCriteria extends Criteria {
+    def getParams()
 }

@@ -22,7 +22,7 @@ import groovy.sql.builder.criteria.util.CriteriaUtil
  *
  * @author Benjamin Muschko
  */
-class BetweenCriteria implements Criteria {
+class BetweenCriteria implements ParametizedCriteria {
     String name
     Object start
     Object end
@@ -35,6 +35,11 @@ class BetweenCriteria implements Criteria {
 
     @Override
     def renderExpression() {
-        "${name} BETWEEN ${CriteriaUtil.getCriteriaValue(start)} AND ${CriteriaUtil.getCriteriaValue(end)}"
+        "${name} BETWEEN ? AND ?"
+    }
+
+    @Override
+    def getParams() {
+        [CriteriaUtil.getCriteriaValue(start), CriteriaUtil.getCriteriaValue(end)]
     }
 }

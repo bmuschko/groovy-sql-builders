@@ -29,6 +29,6 @@ class GreaterThanEqualsCriteria extends KeyValuePair {
 
     @Override
     def renderExpression() {
-        "${name} >= ${CriteriaUtil.getCriteriaValue(value)}"
+        "${name} >= ?"
     }
 }

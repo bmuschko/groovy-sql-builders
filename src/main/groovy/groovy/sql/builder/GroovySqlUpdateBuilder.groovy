@@ -22,6 +22,8 @@ import groovy.sql.builder.criteria.util.CriteriaUtil
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.criteria.factory.*
 import groovy.sql.builder.result.ResultAware
+import groovy.sql.builder.criteria.ParametizedCriteria
+import groovy.sql.builder.criteria.LogicOperator
 
 /**
  *
@@ -96,7 +98,19 @@ class GroovySqlUpdateBuilder extends AbstractGroovySqlFactoryBuilder {
         private Statement createStatement(Object node) {
             String sql = createSql(node.table, node.row, node.criterias)
             List<Object> params = CriteriaUtil.getCriteraValues(node.row.values)
+            collectCriteriaParams(params, node.criterias)
             new Statement(sql: sql, params: params)
+        }
+
+        private List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
+            criterias.each { criteria ->
+                if(criteria instanceof ParametizedCriteria) {
+                    params.addAll criteria.getParams()
+                }
+                else if(criteria instanceof LogicOperator) {
+                    collectCriteriaParams(params, criteria.criterias)
+                }
+            }
         }
 
         @Override

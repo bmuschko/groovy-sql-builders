@@ -30,7 +30,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             eq(name: 'name', value: 'Grand Rapids')
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE name = 'Grand Rapids'"
+        assert delete.statement.sql == "DELETE FROM city WHERE name = ?"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "'Grand Rapids'"
     }
 
     @Test
@@ -40,7 +42,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             ne(name: 'name', value: 'Grand Rapids')
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE name != 'Grand Rapids'"
+        assert delete.statement.sql == "DELETE FROM city WHERE name != ?"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "'Grand Rapids'"
     }
 
     @Test
@@ -50,7 +54,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             like(name: 'name', value: 'Grand%')
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE name like 'Grand%'"
+        assert delete.statement.sql == "DELETE FROM city WHERE name like ?"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "'Grand%'"
     }
 
     @Test
@@ -61,6 +67,7 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
         }
 
         assert delete.statement.sql == "DELETE FROM city WHERE name is null"
+        assert delete.statement.params.size() == 0
     }
 
     @Test
@@ -71,6 +78,7 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
         }
 
         assert delete.statement.sql == "DELETE FROM city WHERE name is not null"
+        assert delete.statement.params.size() == 0
     }
 
     @Test
@@ -80,7 +88,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             gt(name: 'founded_year', value: 1900)
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE founded_year > 1900"
+        assert delete.statement.sql == "DELETE FROM city WHERE founded_year > ?"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "1900"
     }
 
     @Test
@@ -90,7 +100,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             ge(name: 'founded_year', value: 1900)
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE founded_year >= 1900"
+        assert delete.statement.sql == "DELETE FROM city WHERE founded_year >= ?"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "1900"
     }
 
     @Test
@@ -100,7 +112,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             lt(name: 'founded_year', value: 1900)
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE founded_year < 1900"
+        assert delete.statement.sql == "DELETE FROM city WHERE founded_year < ?"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "1900"
     }
 
     @Test
@@ -110,7 +124,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             le(name: 'founded_year', value: 1900)
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE founded_year <= 1900"
+        assert delete.statement.sql == "DELETE FROM city WHERE founded_year <= ?"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "1900"
     }
 
     @Test
@@ -120,7 +136,10 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             between(name: 'founded_year', start: 1900, end: 1950)
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE founded_year BETWEEN 1900 AND 1950"
+        assert delete.statement.sql == "DELETE FROM city WHERE founded_year BETWEEN ? AND ?"
+        assert delete.statement.params.size() == 2
+        assert delete.statement.params.get(0) == "1900"
+        assert delete.statement.params.get(1) == "1950"
     }
 
     @Test
@@ -130,7 +149,11 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             'in'(name: 'founded_year', value: [1900, 1901, 1903])
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE founded_year IN (1900, 1901, 1903)"
+        assert delete.statement.sql == "DELETE FROM city WHERE founded_year IN (?, ?, ?)"
+        assert delete.statement.params.size() == 3
+        assert delete.statement.params.get(0) == "1900"
+        assert delete.statement.params.get(1) == "1901"
+        assert delete.statement.params.get(2) == "1903"
     }
 
     @Test
@@ -143,7 +166,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             }
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE (name = 'Grand Rapids' AND name is not null)"
+        assert delete.statement.sql == "DELETE FROM city WHERE (name = ? AND name is not null)"
+        assert delete.statement.params.size() == 1
+        assert delete.statement.params.get(0) == "'Grand Rapids'"
     }
 
     @Test
@@ -156,7 +181,10 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             }
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE (name = 'Grand Rapids' OR name = 'Little Rock')"
+        assert delete.statement.sql == "DELETE FROM city WHERE (name = ? OR name = ?)"
+        assert delete.statement.params.size() == 2
+        assert delete.statement.params.get(0) == "'Grand Rapids'"
+        assert delete.statement.params.get(1) == "'Little Rock'"
     }
 
     @Test
@@ -168,7 +196,10 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             }
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE NOT (founded_year BETWEEN 1900 AND 1950)"
+        assert delete.statement.sql == "DELETE FROM city WHERE NOT (founded_year BETWEEN ? AND ?)"
+        assert delete.statement.params.size() == 2
+        assert delete.statement.params.get(0) == "1900"
+        assert delete.statement.params.get(1) == "1950"
     }
 
     @Test
@@ -185,6 +216,9 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
             }
         }
 
-        assert delete.statement.sql == "DELETE FROM city WHERE (name is not null AND (name = 'Grand Rapids' OR name = 'Little Rock'))"
+        assert delete.statement.sql == "DELETE FROM city WHERE (name is not null AND (name = ? OR name = ?))"
+        assert delete.statement.params.size() == 2
+        assert delete.statement.params.get(0) == "'Grand Rapids'"
+        assert delete.statement.params.get(1) == "'Little Rock'"
     }
 }

@@ -15,17 +15,24 @@
  */
 package groovy.sql.builder.criteria
 
+import groovy.sql.builder.criteria.util.CriteriaUtil
+
 /**
  *
  *
  * @author Benjamin Muschko
  */
-abstract class KeyValuePair implements Criteria {
+abstract class KeyValuePair implements ParametizedCriteria {
     String name
     Object value
 
     KeyValuePair(name, value) {
         this.name = name
         this.value = value
+    }
+
+    @Override
+    def getParams() {
+        value ? [CriteriaUtil.getCriteriaValue(value)] : []
     }
 }

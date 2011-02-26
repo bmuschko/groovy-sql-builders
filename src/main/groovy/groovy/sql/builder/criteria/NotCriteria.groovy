@@ -30,11 +30,11 @@ class NotCriteria extends LogicOperator {
             expression <<= nestedCriteria.renderExpression()
 
             if(index < criterias.size() - 1) {
-                expression <<= " AND "
+                expression <<= ' AND '
             }
         }
 
-        expression <<= ")"
+        expression <<= ')'
         expression
     }
 }
