@@ -22,7 +22,7 @@ import groovy.sql.builder.criteria.util.CriteriaUtil
  *
  * @author Benjamin Muschko
  */
-class BetweenCriteria implements ParametizedCriteria {
+class BetweenCriteria implements ParameterizedCriteria {
     String name
     Object start
     Object end

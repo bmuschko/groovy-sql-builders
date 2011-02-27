@@ -20,6 +20,6 @@ package groovy.sql.builder.criteria
  *
  * @author Benjamin Muschko
  */
-interface ParametizedCriteria extends Criteria {
+interface ParameterizedCriteria extends Criteria {
     def getParams()
 }

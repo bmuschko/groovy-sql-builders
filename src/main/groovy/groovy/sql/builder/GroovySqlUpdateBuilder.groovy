@@ -22,7 +22,7 @@ import groovy.sql.builder.criteria.util.CriteriaUtil
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.criteria.factory.*
 import groovy.sql.builder.result.ResultAware
-import groovy.sql.builder.criteria.ParametizedCriteria
+import groovy.sql.builder.criteria.ParameterizedCriteria
 import groovy.sql.builder.criteria.LogicOperator
 
 /**
@@ -104,7 +104,7 @@ class GroovySqlUpdateBuilder extends AbstractGroovySqlFactoryBuilder {
 
         private List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
             criterias.each { criteria ->
-                if(criteria instanceof ParametizedCriteria) {
+                if(criteria instanceof ParameterizedCriteria) {
                     params.addAll criteria.getParams()
                 }
                 else if(criteria instanceof LogicOperator) {

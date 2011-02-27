@@ -22,7 +22,7 @@ import groovy.sql.builder.criteria.util.CriteriaUtil
  *
  * @author Benjamin Muschko
  */
-abstract class KeyValuePair implements ParametizedCriteria {
+abstract class KeyValuePair implements ParameterizedCriteria {
     String name
     Object value
 

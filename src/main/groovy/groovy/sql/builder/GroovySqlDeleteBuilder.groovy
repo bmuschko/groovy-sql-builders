@@ -19,9 +19,8 @@ import groovy.sql.Sql
 import groovy.sql.builder.criteria.Criteria
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.criteria.factory.*
-import groovy.sql.builder.criteria.ParametizedCriteria
+import groovy.sql.builder.criteria.ParameterizedCriteria
 import groovy.sql.builder.criteria.LogicOperator
-import groovy.sql.builder.criteria.util.CriteriaUtil
 
 /**
  *
@@ -93,7 +92,7 @@ class GroovySqlDeleteBuilder extends AbstractGroovySqlFactoryBuilder {
 
         private List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
             criterias.each { criteria ->
-                if(criteria instanceof ParametizedCriteria) {
+                if(criteria instanceof ParameterizedCriteria) {
                     params.addAll criteria.getParams()
                 }
                 else if(criteria instanceof LogicOperator) {
