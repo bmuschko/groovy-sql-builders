@@ -221,4 +221,23 @@ class GroovySqlDeleteBuilderTest extends GroovySqlBuilderFixture {
         assert delete.statement.params.get(0) == "'Grand Rapids'"
         assert delete.statement.params.get(1) == "'Little Rock'"
     }
+
+    @Test
+    public void testBuildingWithControlStructure() {
+        def cityNames = [ "Grand Rapids", "Little Rock", "Minneapolis"]
+        def builder = new GroovySqlDeleteBuilder(sql)
+        def delete = builder.delete(TABLE_NAME) {
+            or {
+                for(cityName in cityNames) {
+                    eq(name: 'name', value: cityName)
+                }
+            }
+        }
+
+        assert delete.statement.sql == "DELETE FROM city WHERE (name = ? OR name = ? OR name = ?)"
+        assert delete.statement.params.size() == 3
+        assert delete.statement.params.get(0) == "'Grand Rapids'"
+        assert delete.statement.params.get(1) == "'Little Rock'"
+        assert delete.statement.params.get(2) == "'Minneapolis'"
+    }
 }
