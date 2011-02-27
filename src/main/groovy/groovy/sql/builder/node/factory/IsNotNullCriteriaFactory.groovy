@@ -13,29 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package groovy.sql.builder
+package groovy.sql.builder.node.factory
 
-import groovy.sql.Sql
-import groovy.sql.builder.node.factory.NamedAbstractFactory
+import groovy.sql.builder.node.NotEqualsCriteria
 
 /**
  *
  *
  * @author Benjamin Muschko
  */
-abstract class AbstractGroovySqlFactoryBuilder extends FactoryBuilderSupport {
-    Sql sql
-
-    AbstractGroovySqlFactoryBuilder(Sql sql) {
-        this.sql = sql
-        registerFactories()
+class IsNotNullCriteriaFactory extends KeyValuePairCriteriaAbstractFactory {
+    @Override
+    String getName() {
+        'isNotNull'
     }
 
-    def registerFactories() {
-        getNamedFactories().each { factory ->
-            registerFactory(factory.name, factory)
-        }
+    @Override
+    Object newInstance(FactoryBuilderSupport builder, Object name, Object value, Map attributes) {
+        new NotEqualsCriteria(attributes[NAME_ATTRIBUTE], null)
     }
-
-    abstract List<NamedAbstractFactory> getNamedFactories()
 }

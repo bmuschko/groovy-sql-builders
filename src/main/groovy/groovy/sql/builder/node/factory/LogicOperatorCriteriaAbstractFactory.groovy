@@ -13,29 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package groovy.sql.builder
-
-import groovy.sql.Sql
-import groovy.sql.builder.node.factory.NamedAbstractFactory
+package groovy.sql.builder.node.factory
 
 /**
  *
  *
  * @author Benjamin Muschko
  */
-abstract class AbstractGroovySqlFactoryBuilder extends FactoryBuilderSupport {
-    Sql sql
-
-    AbstractGroovySqlFactoryBuilder(Sql sql) {
-        this.sql = sql
-        registerFactories()
+abstract class LogicOperatorCriteriaAbstractFactory extends CriteriaAbstractFactory {
+    @Override
+    public boolean isLeaf() {
+        false
     }
-
-    def registerFactories() {
-        getNamedFactories().each { factory ->
-            registerFactory(factory.name, factory)
-        }
-    }
-
-    abstract List<NamedAbstractFactory> getNamedFactories()
 }

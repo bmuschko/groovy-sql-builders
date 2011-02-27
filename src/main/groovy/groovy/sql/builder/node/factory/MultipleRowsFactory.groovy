@@ -13,29 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package groovy.sql.builder
+package groovy.sql.builder.node.factory
 
-import groovy.sql.Sql
-import groovy.sql.builder.node.factory.NamedAbstractFactory
+import groovy.sql.builder.node.Row
 
 /**
  *
  *
  * @author Benjamin Muschko
  */
-abstract class AbstractGroovySqlFactoryBuilder extends FactoryBuilderSupport {
-    Sql sql
-
-    AbstractGroovySqlFactoryBuilder(Sql sql) {
-        this.sql = sql
-        registerFactories()
-    }
-
-    def registerFactories() {
-        getNamedFactories().each { factory ->
-            registerFactory(factory.name, factory)
+class MultipleRowsFactory extends RowFactory {
+    @Override
+    void setParent(FactoryBuilderSupport builder, Object parent, Object child) {
+        if(child instanceof Row) {
+            parent.rows << child
         }
     }
-
-    abstract List<NamedAbstractFactory> getNamedFactories()
 }

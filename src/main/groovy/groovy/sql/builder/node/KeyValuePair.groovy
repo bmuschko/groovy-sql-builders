@@ -13,29 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package groovy.sql.builder
+package groovy.sql.builder.node
 
-import groovy.sql.Sql
-import groovy.sql.builder.node.factory.NamedAbstractFactory
+import groovy.sql.builder.node.util.CriteriaUtil
 
 /**
  *
  *
  * @author Benjamin Muschko
  */
-abstract class AbstractGroovySqlFactoryBuilder extends FactoryBuilderSupport {
-    Sql sql
+abstract class KeyValuePair implements ParameterizedCriteria {
+    String name
+    Object value
 
-    AbstractGroovySqlFactoryBuilder(Sql sql) {
-        this.sql = sql
-        registerFactories()
+    KeyValuePair(name, value) {
+        this.name = name
+        this.value = value
     }
 
-    def registerFactories() {
-        getNamedFactories().each { factory ->
-            registerFactory(factory.name, factory)
-        }
+    @Override
+    def getParams() {
+        value ? [CriteriaUtil.getCriteriaValue(value)] : []
     }
-
-    abstract List<NamedAbstractFactory> getNamedFactories()
 }

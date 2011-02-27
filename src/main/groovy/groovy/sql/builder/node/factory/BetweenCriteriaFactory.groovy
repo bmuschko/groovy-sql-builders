@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package groovy.sql.builder
+package groovy.sql.builder.node.factory
 
-import groovy.sql.Sql
-import groovy.sql.builder.node.factory.NamedAbstractFactory
+import groovy.sql.builder.node.BetweenCriteria
 
 /**
  *
  *
  * @author Benjamin Muschko
  */
-abstract class AbstractGroovySqlFactoryBuilder extends FactoryBuilderSupport {
-    Sql sql
+class BetweenCriteriaFactory extends LogicOperatorCriteriaAbstractFactory {
+    final String NAME_ATTRIBUTE = 'name'
+    final String START_ATTRIBUTE = 'start'
+    final String END_ATTRIBUTE = 'end'
 
-    AbstractGroovySqlFactoryBuilder(Sql sql) {
-        this.sql = sql
-        registerFactories()
+    @Override
+    String getName() {
+        'between'
     }
 
-    def registerFactories() {
-        getNamedFactories().each { factory ->
-            registerFactory(factory.name, factory)
-        }
+    @Override
+    Object newInstance(FactoryBuilderSupport builder, Object name, Object value, Map attributes) {
+        new BetweenCriteria(attributes[NAME_ATTRIBUTE], attributes[START_ATTRIBUTE], attributes[END_ATTRIBUTE])
     }
-
-    abstract List<NamedAbstractFactory> getNamedFactories()
 }

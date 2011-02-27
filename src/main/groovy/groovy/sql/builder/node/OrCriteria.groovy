@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package groovy.sql.builder
-
-import groovy.sql.Sql
-import groovy.sql.builder.node.factory.NamedAbstractFactory
+package groovy.sql.builder.node
 
 /**
  *
  *
  * @author Benjamin Muschko
  */
-abstract class AbstractGroovySqlFactoryBuilder extends FactoryBuilderSupport {
-    Sql sql
+class OrCriteria extends LogicOperator {
+    @Override
+    def renderExpression() {
+        def expression = new StringBuilder()
+        expression <<= '('
 
-    AbstractGroovySqlFactoryBuilder(Sql sql) {
-        this.sql = sql
-        registerFactories()
-    }
+        criterias.eachWithIndex { nestedCriteria, index ->
+            expression <<= nestedCriteria.renderExpression()
 
-    def registerFactories() {
-        getNamedFactories().each { factory ->
-            registerFactory(factory.name, factory)
+            if(index < criterias.size() - 1) {
+                expression <<= ' OR '
+            }
         }
-    }
 
-    abstract List<NamedAbstractFactory> getNamedFactories()
+        expression <<= ')'
+        expression
+    }
 }

@@ -16,10 +16,10 @@
 package groovy.sql.builder
 
 import groovy.sql.Sql
-import groovy.sql.builder.criteria.Row
-import groovy.sql.builder.criteria.factory.MultipleRowsFactory
-import groovy.sql.builder.criteria.factory.NamedAbstractFactory
-import groovy.sql.builder.criteria.util.CriteriaUtil
+import groovy.sql.builder.node.Row
+import groovy.sql.builder.node.factory.MultipleRowsFactory
+import groovy.sql.builder.node.factory.NamedAbstractFactory
+import groovy.sql.builder.node.util.CriteriaUtil
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.result.ResultAware
 
