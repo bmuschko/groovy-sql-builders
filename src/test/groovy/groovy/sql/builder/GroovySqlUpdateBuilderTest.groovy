@@ -38,4 +38,23 @@ class GroovySqlUpdateBuilderTest extends GroovySqlBuilderFixture {
         assert update.statement.params.get(2) == "'Las Vegas'"
         println "Updated rows: $update.result"
     }
+
+    @Test
+    public void testBuildingWithNotCriteria() {
+        def builder = new GroovySqlUpdateBuilder(sql)
+        def update = builder.update(TABLE_NAME) {
+            row(name: 'New Vegas', founded_year: 2011)
+            not {
+                eq(name: 'name', value: 'Las Vegas')
+                isNull(name: 'name')
+            }
+        }
+
+        assert update.statement.sql == "UPDATE city SET name = ?, founded_year = ? WHERE NOT (name = ? AND name is null)"
+        assert update.statement.params.size() == 3
+        assert update.statement.params.get(0) == "'New Vegas'"
+        assert update.statement.params.get(1) == '2011'
+        assert update.statement.params.get(2) == "'Las Vegas'"
+        println "Updated rows: $update.result"
+    }
 }
