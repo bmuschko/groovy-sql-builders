@@ -27,11 +27,6 @@ class EqualsCriteria extends KeyValuePair {
 
     @Override
     def renderExpression() {
-        if(value) {
-            return "${name} = ?"
-        }
-        else {
-            return "${name} is null"
-        }
+        value ? "${name} = ?" : "${name} is null"
     }
 }

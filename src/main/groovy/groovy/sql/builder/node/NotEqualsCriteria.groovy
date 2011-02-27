@@ -27,11 +27,6 @@ class NotEqualsCriteria extends KeyValuePair {
 
     @Override
     def renderExpression() {
-        if(value) {
-            return "${name} != ?"
-        }
-        else {
-            return "${name} is not null"
-        }
+        value ? "${name} != ?" : "${name} is not null"
     }
 }
