@@ -35,7 +35,8 @@ class GroovySqlSelectBuilder extends AbstractGroovySqlFactoryBuilder {
         [new SelectFactory(), new EqualsCriteriaFactory(), new NotEqualsCriteriaFactory(), new LikeCriteriaFactory(),
          new IsNullCriteriaFactory(), new IsNotNullCriteriaFactory(), new GreaterThanCriteriaFactory(), new GreaterThanEqualsCriteriaFactory(),
          new LessThanCriteriaFactory(), new LessThanEqualsCriteriaFactory(), new BetweenCriteriaFactory(), new InCriteriaFactory(),
-         new AndLogicOperationFactory(), new OrLogicOperationFactory(), new NotLogicOperatorFactory()].asImmutable()
+         new AndLogicOperationFactory(), new OrLogicOperationFactory(), new NotLogicOperatorFactory(),
+         new OrderCriteriaFactory()].asImmutable()
     }
 
     private class SelectFactory extends GroovySqlAbstractFactory {
@@ -62,7 +63,14 @@ class GroovySqlSelectBuilder extends AbstractGroovySqlFactoryBuilder {
         }
 
         private String createSql(String table, criterias) {
-            "SELECT * FROM ${table} ${getCriteriaExpression(criterias)}"
+            def sql = new StringBuilder()
+            sql <<= "SELECT * FROM ${table}"
+
+            if(criterias.size() > 0) {
+                sql <<= " ${getCriteriaExpression(criterias)}"
+            }
+
+            sql
         }
 
         private Statement createStatement(Object node) {

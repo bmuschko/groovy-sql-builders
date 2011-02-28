@@ -24,13 +24,37 @@ import org.junit.Test
  */
 class GroovySqlSelectBuilderTest extends GroovySqlBuilderFixture {
     @Test
-    public void testBuildingWithEqualsCriteria() {
+    public void testBuildingWithNoCriteriaSingleTable() {
+        def builder = new GroovySqlSelectBuilder(sql)
+        def select = builder.select(TABLE_NAME)
+
+        assert select.statement.sql == "SELECT * FROM city"
+        assert select.statement.params.size() == 0
+        println "Selected rows: ${select.result}"
+    }
+
+    @Test
+    public void testBuildingWithEqualsCriteriaSingleTable() {
         def builder = new GroovySqlSelectBuilder(sql)
         def select = builder.select(TABLE_NAME) {
             eq(name: 'name', value: 'Las Vegas')
         }
 
         assert select.statement.sql == "SELECT * FROM city WHERE name = ?"
+        assert select.statement.params.size() == 1
+        assert select.statement.params.get(0) == "'Las Vegas'"
+        println "Selected rows: ${select.result}"
+    }
+
+    @Test
+    public void testBuildingWithEqualsCriteriaSingleTableOrdered() {
+        def builder = new GroovySqlSelectBuilder(sql)
+        def select = builder.select(TABLE_NAME) {
+            eq(name: 'name', value: 'Las Vegas')
+            order(name: 'name', value: 'DESC')
+        }
+
+        assert select.statement.sql == "SELECT * FROM city WHERE name = ? ORDER BY name DESC"
         assert select.statement.params.size() == 1
         assert select.statement.params.get(0) == "'Las Vegas'"
         println "Selected rows: ${select.result}"
