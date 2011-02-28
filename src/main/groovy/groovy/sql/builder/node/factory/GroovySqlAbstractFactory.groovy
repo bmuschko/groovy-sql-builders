@@ -25,6 +25,27 @@ import groovy.sql.builder.node.ParameterizedCriteria
  * @author Benjamin Muschko
  */
 abstract class GroovySqlAbstractFactory extends NamedAbstractFactory {
+    String getCriteriaExpression(List<Criteria> criterias) {
+        def expression = new StringBuilder()
+
+        if(criterias.size() > 0) {
+            criterias.eachWithIndex { criteria, index ->
+                if(index == 0) {
+                    expression <<= "WHERE "
+                }
+                else {
+                    expression <<= " AND "
+                }
+
+                if(criteria instanceof Criteria) {
+                    expression <<= criteria.renderExpression()
+                }
+            }
+        }
+
+        expression
+    }
+
     List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
         criterias.each { criteria ->
             if(criteria instanceof ParameterizedCriteria) {

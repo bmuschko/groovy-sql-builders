@@ -66,24 +66,7 @@ class GroovySqlSelectBuilder extends AbstractGroovySqlFactoryBuilder {
         }
 
         private String createSql(String table, criterias) {
-            def expression = new StringBuilder()
-
-            if(criterias.size() > 0) {
-                criterias.eachWithIndex { criteria, index ->
-                    if(index == 0) {
-                        expression <<= "WHERE "
-                    }
-                    else {
-                        expression <<= " AND "
-                    }
-
-                    if(criteria instanceof Criteria) {
-                        expression <<= criteria.renderExpression()
-                    }
-                }
-            }
-
-            "SELECT * FROM ${table} ${expression}"
+            "SELECT * FROM ${table} ${getCriteriaExpression(criterias)}"
         }
 
         private Statement createStatement(Object node) {
