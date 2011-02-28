@@ -42,7 +42,7 @@ class GroovySqlSelectBuilder extends AbstractGroovySqlFactoryBuilder {
          new AndLogicOperationFactory(), new OrLogicOperationFactory(), new NotLogicOperatorFactory()].asImmutable()
     }
 
-    private class SelectFactory extends NamedAbstractFactory {
+    private class SelectFactory extends GroovySqlAbstractFactory {
         final String TABLE_ATTRIBUTE = 'table'
 
         @Override
@@ -91,17 +91,6 @@ class GroovySqlSelectBuilder extends AbstractGroovySqlFactoryBuilder {
             def params = []
             collectCriteriaParams(params, node.criterias)
             new Statement(sql: sql, params: params)
-        }
-
-        private List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
-            criterias.each { criteria ->
-                if(criteria instanceof ParameterizedCriteria) {
-                    params.addAll criteria.getParams()
-                }
-                else if(criteria instanceof LogicOperator) {
-                    collectCriteriaParams(params, criteria.criterias)
-                }
-            }
         }
 
         @Override

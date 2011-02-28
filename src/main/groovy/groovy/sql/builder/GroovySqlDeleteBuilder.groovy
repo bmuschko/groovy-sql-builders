@@ -40,7 +40,7 @@ class GroovySqlDeleteBuilder extends AbstractGroovySqlFactoryBuilder {
          new AndLogicOperationFactory(), new OrLogicOperationFactory(), new NotLogicOperatorFactory()].asImmutable()
     }
 
-    private class DeleteFactory extends NamedAbstractFactory {
+    private class DeleteFactory extends GroovySqlAbstractFactory {
         final String TABLE_ATTRIBUTE = 'table'
 
         @Override
@@ -88,17 +88,6 @@ class GroovySqlDeleteBuilder extends AbstractGroovySqlFactoryBuilder {
             def params = []
             collectCriteriaParams(params, node.criterias)
             new Statement(sql: sql, params: params)
-        }
-
-        private List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
-            criterias.each { criteria ->
-                if(criteria instanceof ParameterizedCriteria) {
-                    params.addAll criteria.getParams()
-                }
-                else if(criteria instanceof LogicOperator) {
-                    collectCriteriaParams(params, criteria.criterias)
-                }
-            }
         }
 
         @Override

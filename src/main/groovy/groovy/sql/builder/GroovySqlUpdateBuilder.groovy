@@ -19,11 +19,9 @@ import groovy.sql.Sql
 import groovy.sql.builder.node.Criteria
 import groovy.sql.builder.node.Row
 import groovy.sql.builder.node.util.CriteriaUtil
+import groovy.sql.builder.result.ResultAware
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.node.factory.*
-import groovy.sql.builder.result.ResultAware
-import groovy.sql.builder.node.ParameterizedCriteria
-import groovy.sql.builder.node.LogicOperator
 
 /**
  *
@@ -43,7 +41,7 @@ class GroovySqlUpdateBuilder extends AbstractGroovySqlFactoryBuilder {
          new AndLogicOperationFactory(), new OrLogicOperationFactory(), new NotLogicOperatorFactory()].asImmutable()
     }
 
-    private class UpdateFactory extends NamedAbstractFactory {
+    private class UpdateFactory extends GroovySqlAbstractFactory {
         final String TABLE_ATTRIBUTE = 'table'
 
         @Override
@@ -100,17 +98,6 @@ class GroovySqlUpdateBuilder extends AbstractGroovySqlFactoryBuilder {
             List<Object> params = CriteriaUtil.getCriteraValues(node.row.values)
             collectCriteriaParams(params, node.criterias)
             new Statement(sql: sql, params: params)
-        }
-
-        private List<Object> collectCriteriaParams(List<Object> params, List<Criteria> criterias) {
-            criterias.each { criteria ->
-                if(criteria instanceof ParameterizedCriteria) {
-                    params.addAll criteria.getParams()
-                }
-                else if(criteria instanceof LogicOperator) {
-                    collectCriteriaParams(params, criteria.criterias)
-                }
-            }
         }
 
         @Override
