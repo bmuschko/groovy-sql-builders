@@ -16,10 +16,6 @@
 package groovy.sql.builder
 
 import groovy.sql.Sql
-import groovy.sql.builder.node.Criteria
-import groovy.sql.builder.node.LogicOperator
-import groovy.sql.builder.node.ParameterizedCriteria
-import groovy.sql.builder.node.util.CriteriaUtil
 import groovy.sql.builder.result.ResultAware
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.node.factory.*
