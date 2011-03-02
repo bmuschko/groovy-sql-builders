@@ -15,8 +15,6 @@
  */
 package groovy.sql.builder.node
 
-import groovy.sql.builder.node.util.CriteriaUtil
-
 /**
  *
  *
