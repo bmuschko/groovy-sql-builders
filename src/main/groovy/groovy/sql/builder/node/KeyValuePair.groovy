@@ -15,8 +15,6 @@
  */
 package groovy.sql.builder.node
 
-import groovy.sql.builder.node.util.CriteriaUtil
-
 /**
  *
  *
@@ -33,6 +31,6 @@ abstract class KeyValuePair implements ParameterizedCriteria {
 
     @Override
     def getParams() {
-        value ? [CriteriaUtil.getCriteriaValue(value)] : []
+        value ? [value] : []
     }
 }

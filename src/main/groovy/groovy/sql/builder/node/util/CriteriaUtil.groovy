@@ -24,10 +24,6 @@ final class CriteriaUtil {
     private CriteriaUtil() {
     }
 
-    static getCriteriaValue(value) {
-        value
-    }
-
     static getCriteraValues(values) {
         def criteriaValues = []
 

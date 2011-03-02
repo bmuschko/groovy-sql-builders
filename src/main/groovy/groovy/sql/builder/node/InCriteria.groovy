@@ -49,7 +49,7 @@ class InCriteria extends KeyValuePair {
         def params = []
 
         value.each { val ->
-            params << CriteriaUtil.getCriteriaValue(val)
+            params << val
         }
 
         params

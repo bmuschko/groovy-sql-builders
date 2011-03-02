@@ -15,8 +15,6 @@
  */
 package groovy.sql.builder.node
 
-import groovy.sql.builder.node.util.CriteriaUtil
-
 /**
  *
  *
@@ -40,6 +38,6 @@ class BetweenCriteria implements ParameterizedCriteria {
 
     @Override
     def getParams() {
-        [CriteriaUtil.getCriteriaValue(start), CriteriaUtil.getCriteriaValue(end)]
+        [start, end]
     }
 }
