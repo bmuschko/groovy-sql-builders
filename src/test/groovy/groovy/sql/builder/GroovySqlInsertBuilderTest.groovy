@@ -31,18 +31,7 @@ class GroovySqlInsertBuilderTest extends GroovySqlBuilderFixture {
             row(name: 'Little Rock', state: 'Arkansas', founded_year: 1821)
         }
 
-        assert insert.statements.size() == 2
-        assert insert.statements.get(0).sql == "INSERT INTO city (name, state, founded_year) VALUES (?, ?, ?)"
-        assert insert.statements.get(0).params.size() == 3
-        assert insert.statements.get(0).params.get(0) == "'Grand Rapids'"
-        assert insert.statements.get(0).params.get(1) == "'Michigan'"
-        assert insert.statements.get(0).params.get(2) == '1825'
-        assert insert.statements[1].sql == "INSERT INTO city (name, state, founded_year) VALUES (?, ?, ?)"
-        assert insert.statements.get(1).params.size() == 3
-        assert insert.statements.get(1).params.get(0) == "'Little Rock'"
-        assert insert.statements.get(1).params.get(1) == "'Arkansas'"
-        assert insert.statements.get(1).params.get(2) == '1821'
-        assert insert.result.size() == 2
+        checkAssertions(insert)
         println "Created records with IDs $insert.result"
     }
 
@@ -54,18 +43,33 @@ class GroovySqlInsertBuilderTest extends GroovySqlBuilderFixture {
             row(name: 'Little Rock', state: 'Arkansas', founded_year: 1821)
         }
 
+        checkAssertions(insert)
+        println "Created records with IDs $insert.result"
+    }
+
+    private void checkAssertions(insert) {
         assert insert.statements.size() == 2
         assert insert.statements.get(0).sql == "INSERT INTO city (name, state, founded_year) VALUES (?, ?, ?)"
         assert insert.statements.get(0).params.size() == 3
-        assert insert.statements.get(0).params.get(0) == "'Grand Rapids'"
-        assert insert.statements.get(0).params.get(1) == "'Michigan'"
-        assert insert.statements.get(0).params.get(2) == '1825'
+        assert insert.statements.get(0).params.get(0) == "Grand Rapids"
+        assert insert.statements.get(0).params.get(1) == "Michigan"
+        assert insert.statements.get(0).params.get(2) == 1825
         assert insert.statements[1].sql == "INSERT INTO city (name, state, founded_year) VALUES (?, ?, ?)"
         assert insert.statements.get(1).params.size() == 3
-        assert insert.statements.get(1).params.get(0) == "'Little Rock'"
-        assert insert.statements.get(1).params.get(1) == "'Arkansas'"
-        assert insert.statements.get(1).params.get(2) == '1821'
+        assert insert.statements.get(1).params.get(0) == "Little Rock"
+        assert insert.statements.get(1).params.get(1) == "Arkansas"
+        assert insert.statements.get(1).params.get(2) == 1821
         assert insert.result.size() == 2
-        println "Created records with IDs $insert.result"
+        assert insert.result.get(0) == [1]
+        assert insert.result.get(1) == [2]
+
+        def firstRow = sql.firstRow("SELECT * from city WHERE id = ?", [1])
+        assert firstRow.name == "Grand Rapids"
+        assert firstRow.state == "Michigan"
+        assert firstRow.founded_year == 1825
+        def secondRow = sql.firstRow("SELECT * from city WHERE id = ?", [2])
+        assert secondRow.name == "Little Rock"
+        assert secondRow.state == "Arkansas"
+        assert secondRow.founded_year == 1821
     }
 }

@@ -60,7 +60,14 @@ class GroovySqlDeleteBuilder extends AbstractGroovySqlFactoryBuilder {
         }
 
         private String createSql(String table, criterias) {
-            "DELETE FROM ${table} ${getCriteriaExpression(criterias)}"
+            def sql = new StringBuilder()
+            sql <<= "DELETE FROM ${table}"
+
+            if(criterias.size > 0) {
+                sql <<= " ${getCriteriaExpression(criterias)}"
+            }
+
+            sql
         }
 
         private Statement createStatement(Object node) {

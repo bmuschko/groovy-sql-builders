@@ -27,7 +27,7 @@ class OrderCriteria extends KeyValuePair {
 
     @Override
     def renderExpression() {
-        def sort = value ? Sort.valueOf(value) : Sort.ASC
+        def sort = value ? Sort.valueOf(value.toUpperCase()) : Sort.ASC
         "ORDER BY ${name} ${sort}"
     }
 

@@ -24,31 +24,17 @@ final class CriteriaUtil {
     private CriteriaUtil() {
     }
 
-    static String getCriteriaValue(value) {
-        value instanceof String ? "'${value}'" : value
+    static getCriteriaValue(value) {
+        value
     }
 
     static getCriteraValues(values) {
         def criteriaValues = []
 
         values.each { value ->
-            criteriaValues << getCriteriaValue(value)
+            criteriaValues << value
         }
 
         criteriaValues
-    }
-
-    static String joinCriteriaValues(values, separator = ',') {
-        def concatinatedValues = new StringBuilder()
-
-        values.eachWithIndex { value, index ->
-            concatinatedValues <<= getCriteriaValue(value)
-
-            if(index < values.size() - 1) {
-                concatinatedValues <<= separator
-            }
-        }
-
-        concatinatedValues
     }
 }

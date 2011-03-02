@@ -74,7 +74,14 @@ class GroovySqlUpdateBuilder extends AbstractGroovySqlFactoryBuilder {
                 }
             }
 
-            "UPDATE ${table} SET ${columnExpression} ${getCriteriaExpression(criterias)}"
+            def sql = new StringBuilder()
+            sql <<= "UPDATE ${table} SET ${columnExpression}"
+
+            if(criterias.size() > 0) {
+                sql <<= " ${getCriteriaExpression(criterias)}"
+            }
+
+            sql
         }
 
         private Statement createStatement(Object node) {

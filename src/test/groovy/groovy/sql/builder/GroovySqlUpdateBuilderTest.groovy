@@ -15,6 +15,7 @@
  */
 package groovy.sql.builder
 
+import org.junit.Before
 import org.junit.Test
 
 /**
@@ -23,6 +24,32 @@ import org.junit.Test
  * @author Benjamin Muschko
  */
 class GroovySqlUpdateBuilderTest extends GroovySqlBuilderFixture {
+    @Before
+    @Override
+    public void setUp() {
+        super.setUp()
+        sql.executeInsert('INSERT INTO city (name, state, founded_year) VALUES (?, ?, ?)', ['Las Vegas', 'Nevada', 1911])
+        def firstRow = sql.firstRow("SELECT * from city WHERE id = ?", [1])
+        assert firstRow.name == "Las Vegas"
+        assert firstRow.state == "Nevada"
+        assert firstRow.founded_year == 1911
+    }
+
+    @Test
+    public void testBuildingWithoutCriteria() {
+        def builder = new GroovySqlUpdateBuilder(sql)
+        def update = builder.update(TABLE_NAME) {
+            row(name: 'New Vegas', founded_year: 2011)
+        }
+
+        assert update.statement.sql == "UPDATE city SET name = ?, founded_year = ?"
+        assert update.statement.params.size() == 2
+        assert update.statement.params.get(0) == "New Vegas"
+        assert update.statement.params.get(1) == 2011
+        assertRowAfterUpdate()
+        println "Updated rows: $update.result"
+    }
+
     @Test
     public void testBuildingWithEqualsCriteria() {
         def builder = new GroovySqlUpdateBuilder(sql)
@@ -32,10 +59,11 @@ class GroovySqlUpdateBuilderTest extends GroovySqlBuilderFixture {
         }
 
         assert update.statement.sql == "UPDATE city SET name = ?, founded_year = ? WHERE name = ?"
-        assert update.statement.params.size() == 3
-        assert update.statement.params.get(0) == "'New Vegas'"
-        assert update.statement.params.get(1) == '2011'
-        assert update.statement.params.get(2) == "'Las Vegas'"
+         assert update.statement.params.size() == 3
+        assert update.statement.params.get(0) == "New Vegas"
+        assert update.statement.params.get(1) == 2011
+        assert update.statement.params.get(2) == "Las Vegas"
+        assertRowAfterUpdate()
         println "Updated rows: $update.result"
     }
 
@@ -51,10 +79,18 @@ class GroovySqlUpdateBuilderTest extends GroovySqlBuilderFixture {
         }
 
         assert update.statement.sql == "UPDATE city SET name = ?, founded_year = ? WHERE NOT (name = ? AND name is null)"
-        assert update.statement.params.size() == 3
-        assert update.statement.params.get(0) == "'New Vegas'"
-        assert update.statement.params.get(1) == '2011'
-        assert update.statement.params.get(2) == "'Las Vegas'"
+         assert update.statement.params.size() == 3
+        assert update.statement.params.get(0) == "New Vegas"
+        assert update.statement.params.get(1) == 2011
+        assert update.statement.params.get(2) == "Las Vegas"
+        assertRowAfterUpdate()
         println "Updated rows: $update.result"
+    }
+
+    private void assertRowAfterUpdate() {
+        def firstRow = sql.firstRow("SELECT * from city WHERE id = ?", [1])
+        assert firstRow.name == "New Vegas"
+        assert firstRow.state == "Nevada"
+        assert firstRow.founded_year == 2011
     }
 }
