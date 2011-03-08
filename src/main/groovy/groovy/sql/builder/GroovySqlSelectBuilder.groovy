@@ -19,6 +19,7 @@ import groovy.sql.Sql
 import groovy.sql.builder.result.ResultAware
 import groovy.sql.builder.result.Statement
 import groovy.sql.builder.node.factory.*
+import groovy.sql.builder.node.SelectClauseElements
 
 /**
  *
@@ -62,21 +63,25 @@ class GroovySqlSelectBuilder extends AbstractGroovySqlFactoryBuilder {
             node.result = rows
         }
 
-        private String createSql(String table, criterias) {
+        private String createSql(String table, SelectClauseElements clauseElements) {
             def sql = new StringBuilder()
             sql <<= "SELECT * FROM ${table}"
 
-            if(criterias.size() > 0) {
-                sql <<= " ${getCriteriaExpression(criterias)}"
+            if(clauseElements.where.size() > 0) {
+                sql <<= " ${getCriteriaExpression(clauseElements.where)}"
+            }
+
+            if(clauseElements.orderBy) {
+                sql <<= " ${clauseElements.orderBy.renderExpression()}"
             }
 
             sql
         }
 
         private Statement createStatement(Object node) {
-            String sql = createSql(node.table, node.criterias)
+            String sql = createSql(node.table, node.clauseElements)
             def params = []
-            collectCriteriaParams(params, node.criterias)
+            collectCriteriaParams(params, node.clauseElements.where)
             new Statement(sql: sql, params: params)
         }
 
@@ -86,9 +91,9 @@ class GroovySqlSelectBuilder extends AbstractGroovySqlFactoryBuilder {
         }
     }
 
-    private class Select implements ResultAware {
+    class Select implements ResultAware {
         String table
-        def criterias = []
+        def clauseElements = new SelectClauseElements()
         Statement statement
         def result
 

@@ -13,28 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package groovy.sql.builder.node.factory
-
-import groovy.sql.builder.node.OrderCriteria
+package groovy.sql.builder.node
 
 /**
  *
  *
  * @author Benjamin Muschko
  */
-class OrderCriteriaFactory extends KeyValuePairCriteriaAbstractFactory {
-    @Override
-    String getName() {
-        'order'
-    }
-
-    @Override
-    Object newInstance(FactoryBuilderSupport builder, Object name, Object value, Map attributes) {
-        new OrderCriteria(attributes[NAME_ATTRIBUTE], attributes[VALUE_ATTRIBUTE])
-    }
-
-    @Override
-    void setParent(FactoryBuilderSupport builder, Object parent, Object child) {
-        parent.clauseElements.orderBy = child
-    }
+class SelectClauseElements {
+    List<Criteria> where = []
+    def groupBy
+    def having
+    def orderBy
 }

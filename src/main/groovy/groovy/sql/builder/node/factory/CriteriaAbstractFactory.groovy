@@ -16,6 +16,7 @@
 package groovy.sql.builder.node.factory
 
 import groovy.sql.builder.node.Criteria
+import groovy.sql.builder.GroovySqlSelectBuilder.Select
 
 /**
  *
@@ -26,7 +27,12 @@ abstract class CriteriaAbstractFactory extends NamedAbstractFactory {
     @Override
     void setParent(FactoryBuilderSupport builder, Object parent, Object child) {
         if(child instanceof Criteria) {
-            parent.criterias << child
+            if(parent instanceof Select) {
+                parent.clauseElements.where << child
+            }
+            else {
+                parent.criterias << child
+            }
         }
     }
 }
